@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a2e">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <title>Swati Fitness</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ===== PIN LOCK ===== -->
+  <div id="pin-lock" class="pin-lock">
+    <div class="pin-box">
+      <h2>🔒</h2>
+      <p>Enter PIN</p>
+      <div class="pin-dots"><span id="d0"></span><span id="d1"></span><span id="d2"></span><span id="d3"></span></div>
+      <div class="pin-pad">
+        <button onclick="app.pinKey('1')">1</button><button onclick="app.pinKey('2')">2</button><button onclick="app.pinKey('3')">3</button>
+        <button onclick="app.pinKey('4')">4</button><button onclick="app.pinKey('5')">5</button><button onclick="app.pinKey('6')">6</button>
+        <button onclick="app.pinKey('7')">7</button><button onclick="app.pinKey('8')">8</button><button onclick="app.pinKey('9')">9</button>
+        <button></button><button onclick="app.pinKey('0')">0</button><button onclick="app.pinDel()">⌫</button>
+      </div>
+      <p id="pin-error" class="pin-error hidden">Wrong PIN</p>
+    </div>
+  </div>
+
+  <!-- ===== TOP BAR ===== -->
+  <header id="topbar">
+    <h1 id="topbar-title">Workout</h1>
+    <span id="topbar-day"></span>
+  </header>
+
+  <!-- ===== UPDATE BANNER ===== -->
+  <div id="update-banner" class="update-banner hidden" onclick="location.reload()">
+    App update available — tap to refresh
+  </div>
+
+  <!-- ===== WORKOUT TAB ===== -->
+  <section id="tab-workout" class="tab-content active">
+    <div class="card row-between">
+      <label class="small-label">Switch day:</label>
+      <select id="day-override" onchange="app.overrideDay(this.value)"></select>
+    </div>
+
+    <div class="section-label">Morning Routine (5 min)</div>
+    <div class="card" id="morning-routine"></div>
+
+    <div class="workout-header">
+      <h2 id="workout-name"></h2>
+      <div id="workout-round" class="badge"></div>
+    </div>
+
+    <!-- Exercise Card -->
+    <div id="exercise-card" class="card exercise-card">
+      <div id="exercise-name" class="exercise-name"></div>
+      <div id="exercise-reps" class="exercise-reps"></div>
+      <div id="exercise-muscles" class="exercise-muscles"></div>
+
+      <div id="exercise-tips" class="exercise-tips">
+        <div id="tip-breathing" class="tip"><span class="tip-icon">🌬</span> <span id="tip-breathing-text"></span></div>
+        <div id="tip-posture" class="tip"><span class="tip-icon">🧍</span> <span id="tip-posture-text"></span></div>
+      </div>
+
+      <button id="btn-demo" class="btn btn-demo" onclick="app.watchDemo()">▶ Watch Form Demo</button>
+
+      <div id="exercise-timer-display" class="timer-display hidden">
+        <span id="exercise-countdown">00:00</span>
+      </div>
+
+      <div id="rest-banner" class="rest-banner hidden">
+        <span id="rest-label"></span>
+        <span id="rest-countdown" class="rest-time">00:00</span>
+      </div>
+
+      <div class="exercise-actions">
+        <button id="btn-start-exercise" class="btn btn-primary" onclick="app.startExerciseTimer()">▶ Start</button>
+        <button id="btn-done" class="btn btn-success" onclick="app.markDone()">✓ Done</button>
+        <button id="btn-easier" class="btn btn-warn" onclick="app.swapEasier()">↓ Easier</button>
+        <button id="btn-harder" class="btn btn-info" onclick="app.swapHarder()">↑ Harder</button>
+        <button id="btn-skip" class="btn btn-muted" onclick="app.skipExercise()">⏭ Skip</button>
+      </div>
+
+      <div class="exercise-progress">
+        <div id="exercise-progress-bar" class="progress-bar"></div>
+        <span id="exercise-progress-text"></span>
+      </div>
+    </div>
+
+    <div id="workout-complete" class="card hidden">
+      <h2>🎉 Workout Complete!</h2>
+      <p id="workout-summary"></p>
+      <p id="workout-level-summary" class="small-text"></p>
+      <button class="btn btn-primary" onclick="app.resetWorkout()">Reset</button>
+    </div>
+
+    <div id="rest-day-card" class="card hidden">
+      <h2 id="rest-day-title"></h2>
+      <div id="rest-day-desc" class="rest-day-desc"></div>
+    </div>
+
+    <div class="section-label">Today's Checklist</div>
+    <div class="card">
+      <label class="checklist-item"><input type="checkbox" id="chk-stairs" onchange="app.saveChecklist()"> Post-lunch 5-floor stair climb</label>
+      <label class="checklist-item"><input type="checkbox" id="chk-water" onchange="app.saveChecklist()"> 2.5L+ water</label>
+      <label class="checklist-item"><input type="checkbox" id="chk-protein" onchange="app.saveChecklist()"> Protein in every meal (60g+ target)</label>
+      <label class="checklist-item"><input type="checkbox" id="chk-steps" onchange="app.saveChecklist()"> 8000+ steps</label>
+    </div>
+  </section>
+
+  <!-- ===== CARDIO TAB ===== -->
+  <section id="tab-cardio" class="tab-content">
+    <div class="card">
+      <h2>Interval Timer</h2>
+      <div class="row-between">
+        <label>Week:</label>
+        <select id="cardio-week" onchange="app.updateCardioPreview()">
+          <option value="1">Week 1</option><option value="2">Week 2</option>
+          <option value="3">Week 3</option><option value="4">Week 4</option>
+        </select>
+      </div>
+      <pre id="cardio-preview" class="cardio-preview"></pre>
+    </div>
+
+    <div id="cardio-active" class="card hidden">
+      <div id="cardio-phase" class="cardio-phase">WALK</div>
+      <div id="cardio-time" class="cardio-time">00:00</div>
+      <div id="cardio-round-info" class="small-text"></div>
+      <div id="cardio-next" class="small-text"></div>
+      <div class="mt-12">
+        <div id="cardio-total-bar" class="progress-bar"></div>
+        <span id="cardio-total-text" class="small-text"></span>
+      </div>
+      <div class="row-center mt-12">
+        <button id="btn-cardio-pause" class="btn btn-warn" onclick="app.toggleCardioPause()">⏸ Pause</button>
+        <button class="btn btn-danger" onclick="app.stopCardio()">⏹ Stop</button>
+      </div>
+    </div>
+
+    <div class="card" id="cardio-start-card">
+      <button class="btn btn-primary btn-large" onclick="app.startCardio()">▶ Start Cardio Session</button>
+    </div>
+
+    <div class="section-label">Work-Hour Walks (10 min each)</div>
+    <div class="card">
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-walk-1030" onchange="app.saveWalkChecklist()"> 10:30 — Stair climb + walk
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-walk-1300" onchange="app.saveWalkChecklist()"> 1:00 — Pre-lunch walk
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-walk-1330" onchange="app.saveWalkChecklist()"> 1:30 — Post-lunch stair climb
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-walk-1500" onchange="app.saveWalkChecklist()"> 3:00 — Snack break walk
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-walk-1830" onchange="app.saveWalkChecklist()"> 6:30 — End-of-day walk
+      </label>
+      <div class="row-between mt-8">
+        <span class="small-text" id="walk-cal-total">0/250 cal</span>
+        <button class="btn btn-primary" onclick="app.enableWalkNotifications()" style="font-size:.8rem;padding:6px 14px">🔔 Enable Notifications</button>
+      </div>
+    </div>
+
+    <div class="section-label">Movement Reminder</div>
+    <div class="card">
+      <label class="checklist-item">
+        <input type="checkbox" id="chk-movement-reminder" onchange="app.toggleMovementReminder()">
+        Hourly movement reminder (9AM–6PM)
+      </label>
+      <div id="reminder-status" class="small-text"></div>
+    </div>
+  </section>
+
+  <!-- ===== FOOD TAB ===== -->
+  <section id="tab-food" class="tab-content">
+    <div class="section-label">Office Breakfast Ideas</div>
+    <div class="card" id="breakfast-ref"></div>
+
+    <div class="section-label">Office Lunch Ideas</div>
+    <div class="card" id="lunch-ref"></div>
+
+    <div class="section-label">Evening Snack (pick one)</div>
+    <div class="card" id="snack-ref"></div>
+
+    <div class="section-label">Dinner — Select ingredients you have</div>
+    <div class="card">
+      <div id="ingredient-grid" class="ingredient-grid"></div>
+    </div>
+
+    <div id="recipe-results" class="card hidden">
+      <h2>You can make:</h2>
+      <div id="recipe-list"></div>
+    </div>
+
+    <div class="section-label">All Quick Dinner Recipes</div>
+    <div id="all-recipes" class="card"></div>
+  </section>
+
+  <!-- ===== PROGRESS TAB ===== -->
+  <section id="tab-progress" class="tab-content">
+
+    <!-- Soreness Calculator -->
+    <div class="card">
+      <h2>Morning Soreness Check</h2>
+      <p class="small-text" style="margin-bottom:12px">Rate each move 1–10, we'll take the highest as your daily score.</p>
+      <div class="soreness-checks">
+        <div class="soreness-row">
+          <label>Stand up from bed (legs)</label>
+          <input type="range" id="sore-legs" min="1" max="10" value="1" oninput="app.updateSorenessCalc()">
+          <span id="sore-legs-val" class="sore-val">1</span>
+        </div>
+        <div class="soreness-row">
+          <label>Reach arms overhead (arms/shoulders/back)</label>
+          <input type="range" id="sore-arms" min="1" max="10" value="1" oninput="app.updateSorenessCalc()">
+          <span id="sore-arms-val" class="sore-val">1</span>
+        </div>
+        <div class="soreness-row">
+          <label>First staircase (overall)</label>
+          <input type="range" id="sore-stairs" min="1" max="10" value="1" oninput="app.updateSorenessCalc()">
+          <span id="sore-stairs-val" class="sore-val">1</span>
+        </div>
+      </div>
+      <div id="soreness-result" class="soreness-result">
+        <span id="soreness-score">1</span><span>/10</span>
+        <div id="soreness-label" class="soreness-label">Barely notice, muscles feel normal</div>
+      </div>
+      <button class="btn btn-primary" onclick="app.applySoreness()" style="margin-top:10px">Apply to today's check-in</button>
+    </div>
+
+    <!-- Daily Check-in -->
+    <div class="card">
+      <h2>Daily Check-in</h2>
+      <div class="form-grid">
+        <label>Weight (kg)</label>
+        <input type="number" id="inp-weight" step="0.1" inputmode="decimal" placeholder="e.g. 66.0">
+        <label>Soreness (1-10)</label>
+        <input type="number" id="inp-soreness" min="1" max="10" inputmode="numeric" placeholder="use calculator above">
+        <label>Energy (1-10)</label>
+        <input type="number" id="inp-energy" min="1" max="10" inputmode="numeric" placeholder="1-10">
+        <label>Steps</label>
+        <input type="number" id="inp-steps" inputmode="numeric" placeholder="e.g. 8000">
+        <label>Stair breathing</label>
+        <select id="inp-stairs">
+          <option value="easy">Easy</option>
+          <option value="moderate" selected>Moderate</option>
+          <option value="hard">Hard</option>
+        </select>
+        <label>Sleep (hours)</label>
+        <input type="number" id="inp-sleep" step="0.5" inputmode="decimal" placeholder="e.g. 7">
+        <label>Notes</label>
+        <textarea id="inp-notes" rows="2" placeholder="bloating, stress, cramps..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-large" onclick="app.saveEntry()">Save Today's Entry</button>
+    </div>
+
+    <!-- Measurements (every 2 weeks) -->
+    <div class="card">
+      <h2>Measurements (cm)</h2>
+      <p class="small-text" style="margin-bottom:10px">Take every 2 weeks — same time, before eating.</p>
+      <div class="form-grid">
+        <label>Bust</label>
+        <input type="number" id="inp-bust" step="0.5" inputmode="decimal" placeholder="cm">
+        <label>Upper Arm</label>
+        <input type="number" id="inp-upperarm" step="0.5" inputmode="decimal" placeholder="cm">
+        <label>Armhole</label>
+        <input type="number" id="inp-armhole" step="0.5" inputmode="decimal" placeholder="cm">
+        <label>Neck</label>
+        <input type="number" id="inp-neck" step="0.5" inputmode="decimal" placeholder="cm">
+        <label>Waist</label>
+        <input type="number" id="inp-waist" step="0.5" inputmode="decimal" placeholder="narrowest point">
+        <label>Stomach</label>
+        <input type="number" id="inp-stomach" step="0.5" inputmode="decimal" placeholder="at belly button">
+        <label>Hip</label>
+        <input type="number" id="inp-hip" step="0.5" inputmode="decimal" placeholder="widest point">
+        <label>Thigh</label>
+        <input type="number" id="inp-thigh" step="0.5" inputmode="decimal" placeholder="widest part">
+      </div>
+      <button class="btn btn-accent btn-large" onclick="app.saveMeasurements()">Save Measurements</button>
+      <div id="bf-result" class="small-text mt-8"></div>
+    </div>
+
+    <!-- Calorie Tracker -->
+    <div class="card">
+      <h2>Calorie Tracker</h2>
+      <div class="cal-summary" id="cal-summary">
+        <div class="cal-row"><span>BMR</span><span id="cal-bmr">1,413</span></div>
+        <div class="cal-row"><span>Target</span><span id="cal-target">—</span></div>
+        <div class="cal-row"><span>Eaten</span><span id="cal-eaten">0</span></div>
+        <div class="cal-row"><span>Remaining</span><span id="cal-remain">—</span></div>
+      </div>
+      <div class="cal-bar-wrap mt-8">
+        <div id="cal-bar" class="cal-bar"></div>
+      </div>
+      <div class="mt-12">
+        <select id="cal-food-select" style="width:100%;margin-bottom:8px">
+          <option value="">— Add food item —</option>
+        </select>
+        <div class="row-between">
+          <input type="number" id="cal-qty" inputmode="numeric" value="1" min="1" style="width:60px" placeholder="qty">
+          <button class="btn btn-primary" onclick="app.addCalorie()">+ Add</button>
+        </div>
+      </div>
+      <div id="cal-log" class="mt-8"></div>
+    </div>
+
+    <div class="card row-center gap-8">
+      <button class="btn btn-info" onclick="app.copyCheckin()">📋 Copy Today</button>
+      <button class="btn btn-accent" onclick="app.copyWeeklyReport()">📊 Copy Weekly Report</button>
+    </div>
+
+    <div class="card"><h2>Weight Trend</h2><canvas id="chart-weight"></canvas></div>
+    <div class="card"><h2>Soreness & Energy</h2><canvas id="chart-soreness"></canvas></div>
+    <div class="card"><h2>Body Measurements</h2><canvas id="chart-measurements"></canvas></div>
+    <div class="card"><h2>Body Fat % Trend</h2><canvas id="chart-bodyfat"></canvas></div>
+
+    <div class="card">
+      <h2>History</h2>
+      <div id="history-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== CONFIG TAB ===== -->
+  <section id="tab-config" class="tab-content">
+    <div class="card">
+      <h2>Google Sheets Sync</h2>
+      <p class="small-text">Paste your Apps Script web app URL to auto-sync entries.</p>
+      <input type="url" id="inp-sheet-url" placeholder="https://script.google.com/..." onchange="app.saveSheetURL()">
+      <button class="btn btn-primary mt-12" onclick="app.syncNow()">⬆ Sync Now</button>
+      <div id="sync-status" class="small-text mt-8"></div>
+    </div>
+
+    <div class="card">
+      <h2>Update Plan from Markdown</h2>
+      <p class="small-text">Upload your updated .md plan to refresh exercises, meals, intervals.</p>
+      <textarea id="md-input" rows="6" placeholder="Paste .md content here..."></textarea>
+      <div class="row-center gap-8 mt-12">
+        <button class="btn btn-primary" onclick="app.importMD()">Apply</button>
+        <label class="btn btn-info file-label">Upload .md<input type="file" id="md-file" accept=".md,.txt" onchange="app.loadMDFile(event)" hidden></label>
+      </div>
+      <div id="md-status" class="small-text mt-8"></div>
+    </div>
+
+    <div class="card">
+      <h2>Your Fitness Level</h2>
+      <div id="level-summary"></div>
+    </div>
+
+    <div class="card">
+      <h2>Data</h2>
+      <div class="row-center gap-8">
+        <button class="btn btn-info" onclick="app.exportData()">Export JSON</button>
+        <button class="btn btn-warn" onclick="app.clearData()">Clear All</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <nav id="bottom-nav">
+    <button class="nav-btn active" data-tab="workout" onclick="app.switchTab('workout')">
+      <span class="nav-icon">🏋️</span><span class="nav-label">Workout</span>
+    </button>
+    <button class="nav-btn" data-tab="cardio" onclick="app.switchTab('cardio')">
+      <span class="nav-icon">🏃</span><span class="nav-label">Cardio</span>
+    </button>
+    <button class="nav-btn" data-tab="food" onclick="app.switchTab('food')">
+      <span class="nav-icon">🍳</span><span class="nav-label">Food</span>
+    </button>
+    <button class="nav-btn" data-tab="progress" onclick="app.switchTab('progress')">
+      <span class="nav-icon">📊</span><span class="nav-label">Progress</span>
+    </button>
+    <button class="nav-btn" data-tab="config" onclick="app.switchTab('config')">
+      <span class="nav-icon">⚙️</span><span class="nav-label">Config</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(function(reg) {
+        reg.addEventListener('updatefound', function() {
+          var w = reg.installing;
+          if (w) w.addEventListener('statechange', function() {
+            if (w.state === 'activated') {
+              document.getElementById('update-banner').classList.remove('hidden');
+            }
+          });
+        });
+      });
+    }
+  </script>
+</body>
+</html>
