@@ -1,4 +1,4 @@
-var CACHE = 'swati-fitness-v8';
+var CACHE = 'swati-fitness-v8.1';
 var ASSETS = ['/', '/index.html', '/style.css', '/app.js', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', function (e) {
@@ -17,19 +17,14 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('fetch', function (e) {
   var url = new URL(e.request.url);
-  if (url.pathname.endsWith('.html') || url.pathname === '/') {
-    // Network-first for HTML
+  if (url.origin === location.origin) {
+    // Network-first for all own assets
     e.respondWith(
       fetch(e.request).then(function (r) {
         var clone = r.clone();
         caches.open(CACHE).then(function (c) { c.put(e.request, clone); });
         return r;
       }).catch(function () { return caches.match(e.request); })
-    );
-  } else if (url.origin === location.origin) {
-    // Cache-first for own assets
-    e.respondWith(
-      caches.match(e.request).then(function (r) { return r || fetch(e.request); })
     );
   }
 });
