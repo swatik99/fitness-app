@@ -996,8 +996,9 @@ var app = (function () {
     };
     $('sync-status').textContent = 'Syncing...';
     fetch(url, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     }).then(function () {
       $('sync-status').textContent = 'Synced at ' + new Date().toLocaleTimeString();
