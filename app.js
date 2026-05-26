@@ -620,27 +620,35 @@ var app = (function () {
 
   function recipeCard(r, withCook) {
     var d = document.createElement('div'); d.className = 'recipe-card';
-    // Ingredient list with quantities
-    var ingHtml = '<div class="recipe-ing"><strong>You need:</strong> ';
-    if (r.ingredients) {
-      var parts = [], i, len;
-      for (i = 0, len = r.ingredients.length; i < len; i++) {
-        var ing = r.ingredients[i];
-        parts.push(ing.qty + ' ' + ing.unit + ' ' + ing.item);
-      }
-      ingHtml += parts.join(', ');
+    var rIdx = RECIPES.indexOf(r);
+    // Find the main scalable ingredient (first one with g/ml unit)
+    var scaleIng = null, scaleIdx = -1, i, len;
+    for (i = 0, len = r.ingredients.length; i < len; i++) {
+      var u = r.ingredients[i].unit;
+      if (u === 'g' || u === 'g dry' || u === 'g cooked' || u === 'ml') { scaleIng = r.ingredients[i]; scaleIdx = i; break; }
     }
-    ingHtml += '</div>';
+    // Scale bar (only for recipes with a scalable main ingredient)
+    var scaleHtml = '';
+    if (scaleIng && withCook) {
+      scaleHtml = '<div class="recipe-scale mt-8">' +
+        '<label class="small-text">I have <input type="number" class="scale-input" value="' + scaleIng.qty + '" min="1" inputmode="numeric" data-ridx="' + rIdx + '" data-sidx="' + scaleIdx + '" onchange="app.scaleRecipe(this)"> ' + scaleIng.unit + ' ' + scaleIng.item + '</label>' +
+        '</div>';
+    }
+    // Ingredient list with quantities
+    var ingHtml = '<div class="recipe-ing" data-ridx="' + rIdx + '"><strong>You need:</strong> ';
+    var parts = [];
+    for (i = 0, len = r.ingredients.length; i < len; i++) {
+      var ing = r.ingredients[i];
+      parts.push('<span class="ing-item">' + ing.qty + ' ' + ing.unit + ' ' + ing.item + '</span>');
+    }
+    ingHtml += parts.join(', ') + '</div>';
     // Steps
     var s = '<ol>', i2, len2;
     for (i2 = 0, len2 = r.steps.length; i2 < len2; i2++) s += '<li>' + r.steps[i2] + '</li>';
     s += '</ol>';
-    // Serves + per-portion cal
-    var perServe = Math.round(r.totalCal / r.serves);
-    var perProtein = Math.round(r.protein / r.serves);
     d.innerHTML = '<h3>' + r.name + '</h3>' +
-      '<div class="recipe-meta"><span>\u23F1 ' + r.time + ' min</span><span>\uD83D\uDD25 ' + r.totalCal + ' cal total</span><span>\uD83D\uDCAA ' + r.protein + 'g protein</span><span>Serves ' + r.serves + '</span></div>' +
-      ingHtml +
+      '<div class="recipe-meta"><span>\u23F1 ' + r.time + ' min</span><span class="rc-cal">\uD83D\uDD25 ' + r.totalCal + ' cal</span><span class="rc-prot">\uD83D\uDCAA ' + r.protein + 'g P</span><span class="rc-serves">Serves ' + r.serves + '</span></div>' +
+      scaleHtml + ingHtml +
       '<div class="recipe-steps">' + s + '</div>' +
       (withCook ? '<div class="recipe-portion mt-8">' +
         '<label class="small-text">I ate <select class="portion-select" data-recipe="' + r.name.replace(/'/g, "\\'") + '" data-totalcal="' + r.totalCal + '" data-serves="' + r.serves + '" data-protein="' + r.protein + '">' +
@@ -651,8 +659,42 @@ var app = (function () {
     return d;
   }
 
+  function scaleRecipe(input) {
+    var rIdx = parseInt(input.dataset.ridx);
+    var sIdx = parseInt(input.dataset.sidx);
+    var r = RECIPES[rIdx];
+    var originalQty = r.ingredients[sIdx].qty;
+    var newQty = parseFloat(input.value) || originalQty;
+    var ratio = newQty / originalQty;
+    var scaledCal = Math.round(r.totalCal * ratio);
+    var scaledProtein = Math.round(r.protein * ratio);
+    var scaledServes = Math.round(r.serves * ratio * 10) / 10;
+    // Update the card's ingredient list
+    var card = input.closest('.recipe-card');
+    var ingEl = card.querySelector('.recipe-ing');
+    var parts = [], i, len;
+    for (i = 0, len = r.ingredients.length; i < len; i++) {
+      var ing = r.ingredients[i];
+      var q = i === sIdx ? newQty : Math.round(ing.qty * ratio * 10) / 10;
+      parts.push('<span class="ing-item">' + q + ' ' + ing.unit + ' ' + ing.item + '</span>');
+    }
+    ingEl.innerHTML = '<strong>You need:</strong> ' + parts.join(', ');
+    // Update meta
+    card.querySelector('.rc-cal').textContent = '\uD83D\uDD25 ' + scaledCal + ' cal';
+    card.querySelector('.rc-prot').textContent = '\uD83D\uDCAA ' + scaledProtein + 'g P';
+    card.querySelector('.rc-serves').textContent = 'Serves ' + scaledServes;
+    // Update portion selector data attributes
+    var sel = card.querySelector('.portion-select');
+    if (sel) {
+      sel.dataset.totalcal = scaledCal;
+      sel.dataset.serves = scaledServes;
+      sel.dataset.protein = scaledProtein;
+      sel.innerHTML = portionOptions(Math.max(scaledServes, 2));
+    }
+  }
+
   function portionOptions(serves) {
-    var opts = '', options = [0.25, 0.5, 0.75, 1, 1.5, 2], i, len;
+    var opts = '', options = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4], i, len;
     for (i = 0, len = options.length; i < len; i++) {
       if (options[i] <= serves) {
         opts += '<option value="' + options[i] + '"' + (options[i] === 1 ? ' selected' : '') + '>' + options[i] + '</option>';
@@ -665,7 +707,7 @@ var app = (function () {
     var sel = btn.parentNode.querySelector('.portion-select');
     var portion = parseFloat(sel.value);
     var totalCal = parseInt(sel.dataset.totalcal);
-    var serves = parseInt(sel.dataset.serves);
+    var serves = parseFloat(sel.dataset.serves);
     var protein = parseInt(sel.dataset.protein);
     var name = sel.dataset.recipe;
     var cal = Math.round((totalCal / serves) * portion);
@@ -1336,6 +1378,7 @@ var app = (function () {
     addCalorie: addCalorie, removeCalorie: removeCalorie,
     saveMeasurements: saveMeasurements,
     saveWalkChecklist: saveWalkChecklist, enableWalkNotifications: enableWalkNotifications,
-    logRecipePortion: logRecipePortion
+    logRecipePortion: logRecipePortion,
+    scaleRecipe: scaleRecipe
   };
 })();
