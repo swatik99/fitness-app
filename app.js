@@ -131,9 +131,9 @@ var app = (function () {
         { name: 'Side Plank', reps: '20s each', timed: true, timerSec: 20, easier: { name: 'Side Plank', reps: '15s (knees)', timerSec: 15 }, harder: { name: 'Side Plank', reps: '30s each', timerSec: 30 } }
       ]
     },
-    tuesday: { name: 'Cardio + Mobility', type: 'cardio', description: 'Go to the Cardio tab for your interval timer.\n\nAfter cardio, do 5 min:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Wall posture hold × 30s × 2' },
-    thursday: { name: 'Cardio + Mobility', type: 'cardio', description: 'Go to the Cardio tab for your interval timer.\n\nPosture finisher:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Neck rolls × 10 each direction' },
-    saturday: { name: 'Cardio (Sat)', type: 'cardio', description: 'Go to the Cardio tab for your interval timer.\n\nOr do a Chloe Ting video instead.\n\nPosture finisher:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Wall posture hold × 30s × 2' },
+    tuesday: { name: 'Morning Jog + Cardio', type: 'cardio', description: '🏃‍♀️ Morning jog (use interval timer below)\n\nAfter jog, do 5 min:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Wall posture hold × 30s × 2' },
+    thursday: { name: 'Morning Jog + Cardio', type: 'cardio', description: '🏃‍♀️ Morning jog (use interval timer below)\n\nPosture finisher:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Neck rolls × 10 each direction' },
+    saturday: { name: 'Morning Jog + Cardio (Sat)', type: 'cardio', description: '🏃‍♀️ Morning jog (use interval timer below)\n\nOr do a Chloe Ting video instead.\n\nPosture finisher:\n• Chin tucks × 10\n• Shoulder blade squeezes × 15\n• Wall posture hold × 30s × 2' },
     sunday: { name: 'Active Rest', type: 'rest', description: 'Light walk 20–30 min + stretching.\n\nOptional:\n• Gentle mobility\n• Foam rolling\n\nRest is part of the plan.' }
   };
 
