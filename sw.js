@@ -1,4 +1,4 @@
-var CACHE = 'swati-fitness-v3';
+var CACHE = 'swati-fitness-v4';
 var ASSETS = ['/', '/index.html', '/style.css', '/app.js', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', function (e) {

@@ -146,27 +146,52 @@ var app = (function () {
 
   var MORNING_ROUTINE = ['Glass of water', 'Sunlight (window/balcony)', 'Neck rolls × 10', 'Shoulder rolls × 10', 'Cat-cow × 10', 'Hip circles × 10', 'Toe touch stretch × 20s'];
 
-  var INGREDIENTS = ['Eggs', 'Chicken', 'Curd', 'Greek Yogurt', 'Chapathi', 'Dosa Batter', 'Onion', 'Tomato', 'Cucumber', 'Carrot', 'Capsicum', 'Beans', 'Cabbage', 'Dal', 'Oats', 'Milk', 'Banana', 'Roasted Chana', 'Almonds', 'Rice', 'Bread', 'Butter', 'Cheese'];
+  var INGREDIENTS = ['Eggs', 'Chicken', 'Sardine', 'Curd', 'Greek Yogurt', 'Chapathi', 'Dosa Batter', 'Onion', 'Tomato', 'Cucumber', 'Carrot', 'Capsicum', 'Beans', 'Cabbage', 'Dal', 'Green Gram', 'Oats', 'Milk', 'Roasted Chana', 'Almonds', 'Rice', 'Bread', 'Butter'];
 
   var RECIPES = [
-    { name: 'Egg Bhurji + Chapathi', time: 12, cal: '~350', protein: 'high', need: ['Eggs', 'Onion', 'Tomato', 'Chapathi'], steps: ['Heat oil, add chopped onion+tomato', 'Salt, turmeric, pepper', 'Crack 2–3 eggs, scramble', 'Serve with 1 chapathi'] },
-    { name: '2-Egg Omelette + Veggies', time: 10, cal: '~320', protein: 'high', need: ['Eggs', 'Onion'], steps: ['Beat 2 eggs with salt+pepper', 'Add chopped onion/capsicum', 'Cook on medium', 'Serve with chapathi or bread + sliced cucumber'] },
-    { name: 'Chicken Stir Fry + Salad', time: 15, cal: '~400', protein: 'very high', need: ['Chicken', 'Onion', 'Capsicum'], steps: ['Heat oil, add sliced chicken', 'Add onion, capsicum, salt, pepper, chili', 'Stir fry 8–10 min high heat', 'Serve with cucumber/carrot salad'] },
-    { name: 'Dosa + Egg Roll', time: 10, cal: '~300', protein: 'medium', need: ['Dosa Batter', 'Eggs'], steps: ['Pour batter, spread thin', 'Crack egg on top, spread', 'Salt, pepper, onion if available', 'Roll and serve'] },
-    { name: 'Curd Bowl + Chana', time: 5, cal: '~280', protein: 'medium', need: ['Curd', 'Roasted Chana'], steps: ['1.5 bowls curd', 'Add chana + chopped cucumber/carrot', 'Add fruit', 'Salt or chaat masala'] },
-    { name: 'Greek Yogurt Bowl', time: 5, cal: '~300', protein: 'high', need: ['Greek Yogurt', 'Banana'], steps: ['1 cup yogurt', 'Slice banana on top', 'Add almonds/chana', 'Optional: honey'] },
-    { name: 'Egg Curry + Chapathi', time: 15, cal: '~380', protein: 'high', need: ['Eggs', 'Onion', 'Tomato', 'Chapathi'], steps: ['Boil 2–3 eggs, peel, halve', 'Quick gravy: onion+tomato+spices', 'Add eggs, simmer 3 min', 'Serve with 2 chapathi'] },
-    { name: 'Quick Dal + Chapathi', time: 15, cal: '~350', protein: 'medium', need: ['Dal', 'Onion', 'Tomato', 'Chapathi'], steps: ['Pressure cook dal (or leftover)', 'Temper: mustard, cumin, onion, tomato', 'Sauté any veggie on side', 'Serve with 1 chapathi'] },
-    { name: 'Boiled Eggs + Curd (no-cook)', time: 5, cal: '~250', protein: 'high', need: ['Eggs', 'Curd'], steps: ['Boil 3 eggs (or pre-boiled)', 'Bowl of curd', 'Add any fruit', 'Zero cooking fallback'] },
-    { name: 'Cheese Omelette + Toast', time: 8, cal: '~350', protein: 'high', need: ['Eggs', 'Cheese', 'Bread'], steps: ['Beat 2 eggs', 'Pour in pan, add cheese', 'Fold, cook through', 'Toast 1 bread, serve together'] },
-    { name: 'Chicken Rice Bowl', time: 15, cal: '~420', protein: 'very high', need: ['Chicken', 'Rice', 'Onion'], steps: ['Cook chicken with onion+spices', 'Small portion rice (leftover/quick-cook)', 'Top rice with chicken', 'Curd on side'] }
+    { name: 'Egg Bhurji + Chapathi', time: 12, totalCal: 350, serves: 1, protein: 18, need: ['Eggs', 'Onion', 'Chapathi'],
+      ingredients: [{ item: 'Eggs', qty: 2, unit: 'pcs' }, { item: 'Onion', qty: 0.5, unit: 'medium' }, { item: 'Tomato', qty: 0.5, unit: 'medium' }, { item: 'Oil', qty: 1, unit: 'tsp' }, { item: 'Chapathi', qty: 1, unit: 'pc' }],
+      steps: ['Heat 1 tsp oil, add chopped onion+tomato (2 min)', 'Add salt, turmeric, pepper', 'Crack 2 eggs, scramble (3 min)', 'Serve with 1 chapathi'] },
+    { name: '2-Egg Omelette + Veggies', time: 10, totalCal: 250, serves: 1, protein: 14, need: ['Eggs', 'Onion'],
+      ingredients: [{ item: 'Eggs', qty: 2, unit: 'pcs' }, { item: 'Onion', qty: 0.25, unit: 'medium' }, { item: 'Oil', qty: 1, unit: 'tsp' }, { item: 'Cucumber', qty: 0.5, unit: 'medium' }],
+      steps: ['Beat 2 eggs with salt+pepper', 'Add chopped onion', 'Cook on medium both sides', 'Serve with sliced cucumber'] },
+    { name: 'Chicken Stir Fry', time: 15, totalCal: 400, serves: 2, protein: 50, need: ['Chicken', 'Onion', 'Capsicum'],
+      ingredients: [{ item: 'Chicken', qty: 250, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Capsicum', qty: 0.5, unit: 'medium' }, { item: 'Oil', qty: 2, unit: 'tsp' }, { item: 'Chilli powder', qty: 0.5, unit: 'tsp' }],
+      steps: ['Heat 2 tsp oil, add 250g sliced chicken', 'Add 1 onion + half capsicum sliced', 'Salt, pepper, chilli — stir fry 8–10 min', 'Serve with cucumber/carrot salad'] },
+    { name: 'Dosa + Egg Roll', time: 10, totalCal: 300, serves: 1, protein: 10, need: ['Dosa Batter', 'Eggs'],
+      ingredients: [{ item: 'Dosa Batter', qty: 100, unit: 'ml' }, { item: 'Eggs', qty: 1, unit: 'pc' }, { item: 'Onion', qty: 0.25, unit: 'medium' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Pour 100ml batter, spread thin', 'Crack 1 egg on top, spread', 'Salt, pepper, chopped onion', 'Roll and serve'] },
+    { name: 'Curd Bowl + Chana', time: 5, totalCal: 280, serves: 1, protein: 14, need: ['Curd', 'Roasted Chana'],
+      ingredients: [{ item: 'Curd', qty: 300, unit: 'g' }, { item: 'Roasted Chana', qty: 30, unit: 'g' }, { item: 'Cucumber', qty: 0.5, unit: 'medium' }, { item: 'Carrot', qty: 0.5, unit: 'medium' }],
+      steps: ['300g curd in a bowl', 'Add 30g roasted chana', 'Chop half cucumber + half carrot', 'Salt or chaat masala'] },
+    { name: 'Greek Yogurt Bowl', time: 5, totalCal: 250, serves: 1, protein: 15, need: ['Greek Yogurt'],
+      ingredients: [{ item: 'Greek Yogurt', qty: 150, unit: 'g' }, { item: 'Almonds', qty: 5, unit: 'pcs' }, { item: 'Roasted Chana', qty: 15, unit: 'g' }],
+      steps: ['150g yogurt in a bowl', 'Add 5 almonds + 15g chana', 'Optional: honey 1 tsp'] },
+    { name: 'Egg Curry + Chapathi', time: 15, totalCal: 450, serves: 2, protein: 24, need: ['Eggs', 'Onion', 'Tomato', 'Chapathi'],
+      ingredients: [{ item: 'Eggs', qty: 3, unit: 'pcs' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Tomato', qty: 1, unit: 'medium' }, { item: 'Oil', qty: 2, unit: 'tsp' }, { item: 'Chapathi', qty: 2, unit: 'pcs' }, { item: 'Chilli powder', qty: 0.5, unit: 'tsp' }, { item: 'Turmeric', qty: 0.25, unit: 'tsp' }],
+      steps: ['Boil 3 eggs, peel, halve', 'Heat 2 tsp oil, fry 1 onion + 1 tomato chopped', 'Add chilli + turmeric, cook 3 min', 'Add eggs, simmer 3 min — serve with 2 chapathi'] },
+    { name: 'Quick Dal + Chapathi', time: 15, totalCal: 400, serves: 2, protein: 16, need: ['Dal', 'Onion', 'Tomato', 'Chapathi'],
+      ingredients: [{ item: 'Dal', qty: 100, unit: 'g dry' }, { item: 'Onion', qty: 0.5, unit: 'medium' }, { item: 'Tomato', qty: 0.5, unit: 'medium' }, { item: 'Oil', qty: 1, unit: 'tsp' }, { item: 'Chapathi', qty: 2, unit: 'pcs' }],
+      steps: ['Cook 100g dal in pressure cooker (or use leftover)', 'Temper: 1 tsp oil, mustard, cumin, half onion, half tomato', 'Mix into dal', 'Serve with 2 chapathi'] },
+    { name: 'Boiled Eggs + Curd (no-cook)', time: 5, totalCal: 250, serves: 1, protein: 22, need: ['Eggs', 'Curd'],
+      ingredients: [{ item: 'Eggs', qty: 3, unit: 'pcs' }, { item: 'Curd', qty: 200, unit: 'g' }],
+      steps: ['Boil 3 eggs (or pre-boiled)', '200g curd in bowl', 'Salt, pepper on eggs', 'Zero cooking fallback'] },
+    { name: 'Chicken Rice Bowl', time: 15, totalCal: 500, serves: 2, protein: 40, need: ['Chicken', 'Rice', 'Onion'],
+      ingredients: [{ item: 'Chicken', qty: 200, unit: 'g' }, { item: 'Rice', qty: 150, unit: 'g cooked' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Oil', qty: 2, unit: 'tsp' }, { item: 'Curd', qty: 100, unit: 'g' }],
+      steps: ['Heat 2 tsp oil, cook 200g chicken with 1 onion + spices (8 min)', '150g cooked rice on plate', 'Top rice with chicken', '100g curd on side'] },
+    { name: 'Sardine Fry', time: 10, totalCal: 240, serves: 1, protein: 30, need: ['Sardine'],
+      ingredients: [{ item: 'Sardine', qty: 3, unit: 'pcs' }, { item: 'Chilli powder', qty: 0.5, unit: 'tsp' }, { item: 'Onion', qty: 0.25, unit: 'medium' }, { item: 'Garlic', qty: 2, unit: 'cloves' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Coat 3 sardines with chilli powder + salt', 'Heat 1 tsp oil, fry with sliced onion + garlic', 'Cook 3–4 min each side', 'Serve with chapathi or rice'] },
+    { name: 'Kanjipayar (Green Gram)', time: 15, totalCal: 200, serves: 2, protein: 14, need: ['Green Gram'],
+      ingredients: [{ item: 'Green Gram', qty: 100, unit: 'g dry' }, { item: 'Coconut', qty: 2, unit: 'tbsp grated' }, { item: 'Shallots', qty: 3, unit: 'pcs' }, { item: 'Coconut oil', qty: 1, unit: 'tsp' }],
+      steps: ['Boil 100g green gram till soft (10 min)', 'Drain, add grated coconut + sliced shallots', 'Temper with 1 tsp coconut oil + mustard', 'Salt to taste'] }
   ];
 
   var OFFICE_BF = [
     { name: '2 Omelettes', desc: 'Great protein start. Add toast/dosa if hungry.', protein: 'high' },
     { name: '1–2 Dosa + Egg/Curd', desc: 'Pair dosa with protein anchor always.', protein: 'medium' },
     { name: '2 Idli + Sambar + Egg', desc: 'Balanced. Sambar adds lentil protein.', protein: 'medium' },
-    { name: 'Oats + Milk + Fruit', desc: '40g oats, milk, banana. Chia seeds optional.', protein: 'medium' },
+    { name: 'Oats + Milk + Fruit', desc: '40g oats, milk, apple/orange. Chia seeds optional.', protein: 'medium' },
     { name: '2 Chapathi + Egg Curry', desc: 'Filling and protein-rich.', protein: 'high' }
   ];
 
@@ -177,7 +202,7 @@ var app = (function () {
     { name: 'Rice + Dal + Veg', desc: 'Controlled rice + protein + greens.', protein: 'medium' }
   ];
 
-  var SNACKS = ['Fruit (banana, apple, orange)', 'Buttermilk', 'Roasted chana (handful)', 'Boiled eggs (1–2)', 'Greek yogurt', 'Almonds/walnuts (small handful)', 'Sprouts'];
+  var SNACKS = ['Apple / Orange', 'Buttermilk', 'Roasted chana (30g — 110 cal, 7g protein)', 'Boiled eggs (1–2)', 'Greek yogurt (150g — 130 cal, 15g protein)', 'Almonds (10 pcs — 70 cal)', 'Seed laddus (3cm — 65 cal each)', 'Sprouts'];
 
   // ===== STATE =====
   var st = {
@@ -595,15 +620,64 @@ var app = (function () {
 
   function recipeCard(r, withCook) {
     var d = document.createElement('div'); d.className = 'recipe-card';
-    var s = '<ol>'; var i, len;
-    for (i = 0, len = r.steps.length; i < len; i++) s += '<li>' + r.steps[i] + '</li>';
+    // Ingredient list with quantities
+    var ingHtml = '<div class="recipe-ing"><strong>You need:</strong> ';
+    if (r.ingredients) {
+      var parts = [], i, len;
+      for (i = 0, len = r.ingredients.length; i < len; i++) {
+        var ing = r.ingredients[i];
+        parts.push(ing.qty + ' ' + ing.unit + ' ' + ing.item);
+      }
+      ingHtml += parts.join(', ');
+    }
+    ingHtml += '</div>';
+    // Steps
+    var s = '<ol>', i2, len2;
+    for (i2 = 0, len2 = r.steps.length; i2 < len2; i2++) s += '<li>' + r.steps[i2] + '</li>';
     s += '</ol>';
-    d.innerHTML = '<h3>' + r.name + '</h3><div class="recipe-meta"><span>⏱ ' + r.time + ' min</span><span>🔥 ' + r.cal + '</span><span>💪 ' + r.protein + '</span></div><div class="recipe-steps">' + s + '</div>' +
-      (withCook ? '<button class="btn btn-success mt-8" style="font-size:.78rem;padding:6px 12px" onclick="app.cookIt(\'' + r.name.replace(/'/g, "\\'") + '\')">🍳 I\'ll cook this</button>' : '');
+    // Serves + per-portion cal
+    var perServe = Math.round(r.totalCal / r.serves);
+    var perProtein = Math.round(r.protein / r.serves);
+    d.innerHTML = '<h3>' + r.name + '</h3>' +
+      '<div class="recipe-meta"><span>\u23F1 ' + r.time + ' min</span><span>\uD83D\uDD25 ' + r.totalCal + ' cal total</span><span>\uD83D\uDCAA ' + r.protein + 'g protein</span><span>Serves ' + r.serves + '</span></div>' +
+      ingHtml +
+      '<div class="recipe-steps">' + s + '</div>' +
+      (withCook ? '<div class="recipe-portion mt-8">' +
+        '<label class="small-text">I ate <select class="portion-select" data-recipe="' + r.name.replace(/'/g, "\\'") + '" data-totalcal="' + r.totalCal + '" data-serves="' + r.serves + '" data-protein="' + r.protein + '">' +
+        portionOptions(r.serves) +
+        '</select> portion(s)</label> ' +
+        '<button class="btn btn-success" style="font-size:.78rem;padding:6px 12px" onclick="app.logRecipePortion(this)">\uD83C\uDF73 Log it</button>' +
+      '</div>' : '');
     return d;
   }
 
-  function cookIt(name) { logCooking(name); toast('Saved: ' + name); }
+  function portionOptions(serves) {
+    var opts = '', options = [0.25, 0.5, 0.75, 1, 1.5, 2], i, len;
+    for (i = 0, len = options.length; i < len; i++) {
+      if (options[i] <= serves) {
+        opts += '<option value="' + options[i] + '"' + (options[i] === 1 ? ' selected' : '') + '>' + options[i] + '</option>';
+      }
+    }
+    return opts;
+  }
+
+  function logRecipePortion(btn) {
+    var sel = btn.parentNode.querySelector('.portion-select');
+    var portion = parseFloat(sel.value);
+    var totalCal = parseInt(sel.dataset.totalcal);
+    var serves = parseInt(sel.dataset.serves);
+    var protein = parseInt(sel.dataset.protein);
+    var name = sel.dataset.recipe;
+    var cal = Math.round((totalCal / serves) * portion);
+    var prot = Math.round((protein / serves) * portion);
+    // Add to calorie log
+    var log = loadJSON('cal_' + ds(), []);
+    log.push({ name: name + ' (' + portion + ' portion)', cal: cal, qty: 1, protein: prot });
+    saveJSON('cal_' + ds(), log);
+    renderCalorieLog();
+    logCooking(name);
+    toast(name + ': ' + cal + ' cal, ' + prot + 'g protein logged');
+  }
 
   function renderAllRecipes() {
     var c = $('all-recipes'); c.innerHTML = '';
@@ -969,58 +1043,68 @@ var app = (function () {
   // ===== CALORIE TRACKER =====
   var FOOD_DB = [
     // Breakfast
-    { name: '2 Eggs (boiled/omelette)', cal: 155 },
-    { name: '3 Eggs (boiled/omelette)', cal: 232 },
-    { name: 'Egg Bhurji (2 eggs)', cal: 200 },
-    { name: '1 Dosa (plain)', cal: 120 },
-    { name: '2 Dosa', cal: 240 },
-    { name: '1 Idli', cal: 60 },
-    { name: '2 Idli + Sambar', cal: 180 },
-    { name: 'Oats + Milk + Banana', cal: 280 },
-    { name: '1 Chapathi', cal: 100 },
-    { name: '2 Chapathi', cal: 200 },
-    { name: '1 Toast + Butter', cal: 130 },
+    { name: '2 Eggs (boiled/omelette)', cal: 155, protein: 12 },
+    { name: '3 Eggs (boiled/omelette)', cal: 232, protein: 18 },
+    { name: 'Egg Bhurji (2 eggs)', cal: 200, protein: 12 },
+    { name: '1 Dosa (plain)', cal: 120, protein: 3 },
+    { name: '1 Dosa (small 10cm)', cal: 70, protein: 2 },
+    { name: '2 Dosa', cal: 240, protein: 6 },
+    { name: '1 Idli', cal: 60, protein: 2 },
+    { name: '2 Idli + Sambar', cal: 180, protein: 6 },
+    { name: 'Oats + Milk', cal: 220, protein: 8 },
+    { name: '1 Chapathi', cal: 100, protein: 3 },
+    { name: '2 Chapathi', cal: 200, protein: 6 },
+    { name: '1 Toast + Butter', cal: 130, protein: 3 },
     // Lunch
-    { name: 'Rice (1 fist / small)', cal: 180 },
-    { name: 'Rice (medium bowl)', cal: 280 },
-    { name: 'Curd Rice (1 bowl)', cal: 200 },
-    { name: 'Curd Rice (1.5 bowl)', cal: 300 },
-    { name: 'Dal (1 bowl)', cal: 150 },
-    { name: 'Sambar (1 bowl)', cal: 120 },
-    { name: 'Chicken curry (1 serving)', cal: 250 },
-    { name: 'Egg curry (2 eggs)', cal: 220 },
-    { name: 'Vegetable side (sautéed)', cal: 80 },
-    { name: 'Fried rice (small)', cal: 350 },
+    { name: 'Rice (1 fist / small)', cal: 180, protein: 3 },
+    { name: 'Rice (medium bowl)', cal: 280, protein: 5 },
+    { name: 'Onion Pulao (1 bowl)', cal: 250, protein: 5 },
+    { name: 'Curd Rice (1 bowl)', cal: 200, protein: 6 },
+    { name: 'Curd Rice (1.5 bowl)', cal: 300, protein: 9 },
+    { name: 'Dal (1 bowl)', cal: 150, protein: 8 },
+    { name: 'Sambar (1 bowl)', cal: 120, protein: 4 },
+    { name: 'Chicken curry (1 serving)', cal: 250, protein: 25 },
+    { name: 'Egg curry (2 eggs)', cal: 220, protein: 14 },
+    { name: 'Vegetable side (sautéed)', cal: 80, protein: 2 },
+    { name: 'Beetroot Thoran', cal: 90, protein: 2 },
+    { name: 'Kovakka Thoran', cal: 70, protein: 1 },
+    { name: 'Gobi Curry', cal: 110, protein: 3 },
+    { name: 'Fried rice (small)', cal: 350, protein: 8 },
     // Protein
-    { name: 'Chicken (100g grilled/stir fry)', cal: 165 },
-    { name: 'Paneer (50g)', cal: 130 },
-    { name: 'Curd (1 bowl / 200g)', cal: 100 },
-    { name: 'Greek Yogurt (150g)', cal: 130 },
-    { name: 'Buttermilk (1 glass)', cal: 40 },
-    { name: 'Milk (1 glass)', cal: 120 },
+    { name: 'Chicken (100g grilled/stir fry)', cal: 165, protein: 31 },
+    { name: 'Sardine Fry (1 pc)', cal: 80, protein: 10 },
+    { name: 'Sardine Fry (3 pcs)', cal: 240, protein: 30 },
+    { name: 'Paneer (50g)', cal: 130, protein: 9 },
+    { name: 'Curd (1 bowl / 200g)', cal: 100, protein: 6 },
+    { name: 'Greek Yogurt (150g)', cal: 130, protein: 15 },
+    { name: 'Buttermilk (1 glass)', cal: 40, protein: 2 },
+    { name: 'Milk (1 glass)', cal: 120, protein: 6 },
+    { name: 'Kanjipayar/Green Gram (1 bowl)', cal: 100, protein: 7 },
     // Snacks
-    { name: 'Roasted Chana (30g)', cal: 110 },
-    { name: 'Banana', cal: 90 },
-    { name: 'Apple', cal: 70 },
-    { name: 'Orange', cal: 60 },
-    { name: 'Almonds (10 pcs)', cal: 70 },
-    { name: 'Biscuits (2 pcs)', cal: 80 },
-    { name: 'Chai (with milk, sugar)', cal: 60 },
-    { name: 'Chai (without sugar)', cal: 30 },
-    { name: 'Coffee (black)', cal: 5 },
-    { name: 'Coffee (milk, sugar)', cal: 70 },
+    { name: 'Roasted Chana (30g)', cal: 110, protein: 7 },
+    { name: 'Seed Laddu (1 pc, 3cm)', cal: 65, protein: 2 },
+    { name: 'Apple', cal: 70, protein: 0 },
+    { name: 'Orange', cal: 60, protein: 1 },
+    { name: 'Watermelon (1 bowl)', cal: 50, protein: 1 },
+    { name: 'Almonds (10 pcs)', cal: 70, protein: 3 },
+    { name: 'Biscuits (2 pcs)', cal: 80, protein: 1 },
+    { name: 'Dragon Chicken (1 serving)', cal: 280, protein: 22 },
+    { name: 'Chai (with milk, sugar)', cal: 60, protein: 1 },
+    { name: 'Chai (without sugar)', cal: 30, protein: 1 },
+    { name: 'Coffee (black)', cal: 5, protein: 0 },
+    { name: 'Coffee (milk, sugar)', cal: 70, protein: 1 },
+    { name: 'Filter Coffee + Palm Sugar', cal: 50, protein: 1 },
     // Dinner combos
-    { name: 'Cheese Omelette + Toast', cal: 350 },
-    { name: 'Dosa + Egg Roll', cal: 300 },
+    { name: 'Dosa + Egg Roll', cal: 300, protein: 10 },
     // Misc
-    { name: 'Juice (1 glass)', cal: 120 },
-    { name: 'Soft Drink (1 can)', cal: 140 },
-    { name: 'Outside Biryani (1 plate)', cal: 550 },
-    { name: 'Outside Fried Rice', cal: 450 },
-    { name: 'Outside Burger', cal: 400 },
-    { name: 'Chocolate (small bar)', cal: 200 },
-    { name: 'Ice Cream (1 scoop)', cal: 150 },
-    { name: 'Custom (100 cal)', cal: 100 }
+    { name: 'Juice (1 glass)', cal: 120, protein: 0 },
+    { name: 'Soft Drink (1 can)', cal: 140, protein: 0 },
+    { name: 'Outside Biryani (1 plate)', cal: 550, protein: 25 },
+    { name: 'Outside Fried Rice', cal: 450, protein: 10 },
+    { name: 'Outside Burger', cal: 400, protein: 15 },
+    { name: 'Chocolate (small bar)', cal: 200, protein: 2 },
+    { name: 'Ice Cream (1 scoop)', cal: 150, protein: 2 },
+    { name: 'Custom (100 cal)', cal: 100, protein: 0 }
   ];
 
   // BMR: Mifflin-St Jeor for women: 10 * weight + 6.25 * height - 5 * age - 161
@@ -1043,7 +1127,7 @@ var app = (function () {
     for (i = 0, len = FOOD_DB.length; i < len; i++) {
       var o = document.createElement('option');
       o.value = i;
-      o.textContent = FOOD_DB[i].name + ' (' + FOOD_DB[i].cal + ' cal)';
+      o.textContent = FOOD_DB[i].name + ' (' + FOOD_DB[i].cal + ' cal, ' + FOOD_DB[i].protein + 'g P)';
       sel.appendChild(o);
     }
     renderCalorieLog();
@@ -1055,7 +1139,7 @@ var app = (function () {
     var qty = parseInt($('cal-qty').value) || 1;
     var food = FOOD_DB[idx];
     var log = loadJSON('cal_' + ds(), []);
-    log.push({ name: food.name, cal: food.cal * qty, qty: qty });
+    log.push({ name: food.name, cal: food.cal * qty, qty: qty, protein: (food.protein || 0) * qty });
     saveJSON('cal_' + ds(), log);
     $('cal-food-select').value = '';
     $('cal-qty').value = '1';
@@ -1072,8 +1156,11 @@ var app = (function () {
 
   function renderCalorieLog() {
     var log = loadJSON('cal_' + ds(), []);
-    var total = 0, i, len;
-    for (i = 0, len = log.length; i < len; i++) total += log[i].cal;
+    var total = 0, totalProtein = 0, i, len;
+    for (i = 0, len = log.length; i < len; i++) {
+      total += log[i].cal;
+      totalProtein += (log[i].protein || 0);
+    }
 
     var weight = getLatestWeight();
     var bmr = calcBMR(weight);
@@ -1085,6 +1172,8 @@ var app = (function () {
     $('cal-eaten').textContent = total.toLocaleString();
     $('cal-remain').textContent = remain > 0 ? remain.toLocaleString() : 'OVER by ' + Math.abs(remain);
     $('cal-remain').parentNode.querySelector('span:last-child').style.color = remain >= 0 ? 'var(--accent)' : 'var(--danger)';
+    var protEl = $('cal-protein');
+    if (protEl) protEl.textContent = totalProtein + 'g / 80g';
 
     var pct = Math.min((total / target) * 100, 100);
     var bar = $('cal-bar');
@@ -1094,7 +1183,8 @@ var app = (function () {
     var c = $('cal-log'); c.innerHTML = '';
     for (i = 0, len = log.length; i < len; i++) {
       var d = document.createElement('div'); d.className = 'cal-log-item';
-      d.innerHTML = '<span>' + log[i].name + (log[i].qty > 1 ? ' ×' + log[i].qty : '') + '</span><span>' + log[i].cal + ' cal <button onclick="app.removeCalorie(' + i + ')">×</button></span>';
+      var pStr = log[i].protein ? ' · ' + log[i].protein + 'g P' : '';
+      d.innerHTML = '<span>' + log[i].name + (log[i].qty > 1 ? ' ×' + log[i].qty : '') + '</span><span>' + log[i].cal + ' cal' + pStr + ' <button onclick="app.removeCalorie(' + i + ')">×</button></span>';
       c.appendChild(d);
     }
   }
@@ -1233,7 +1323,7 @@ var app = (function () {
     startExerciseTimer: startExerciseTimer, markDone: markDone,
     swapEasier: swapEasier, swapHarder: swapHarder,
     skipExercise: skipExercise, resetWorkout: resetWorkout,
-    watchDemo: watchDemo, cookIt: cookIt,
+    watchDemo: watchDemo,
     startCardio: startCardio, toggleCardioPause: toggleCardioPause,
     stopCardio: stopCardio, updateCardioPreview: updateCardioPreview,
     saveEntry: saveEntry, deleteEntry: deleteEntry,
@@ -1245,6 +1335,7 @@ var app = (function () {
     updateSorenessCalc: updateSorenessCalc, applySoreness: applySoreness,
     addCalorie: addCalorie, removeCalorie: removeCalorie,
     saveMeasurements: saveMeasurements,
-    saveWalkChecklist: saveWalkChecklist, enableWalkNotifications: enableWalkNotifications
+    saveWalkChecklist: saveWalkChecklist, enableWalkNotifications: enableWalkNotifications,
+    logRecipePortion: logRecipePortion
   };
 })();
