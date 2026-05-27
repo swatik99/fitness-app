@@ -398,6 +398,9 @@ var app = (function () {
   }
 
   function initWorkout() {
+    // Restore day override from saved workout state
+    var saved = loadJSON('wo_state', null);
+    if (saved && saved.day) st.overDay = saved.day;
     $('topbar-day').textContent = todayLabel();
     buildDaySel();
     loadWorkout(st.overDay || todayKey());
