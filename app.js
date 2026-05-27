@@ -1558,33 +1558,35 @@ var app = (function () {
 
   // ===== INIT =====
   function fixMay27Data() {
-    if (loadJSON('fix_may27', false)) return;
-    // Remove fake skipped entries from rapid-skip exit (no Stop button at the time)
+    if (loadJSON('fix_may27v2', false)) return;
+    // Replace all May 27 level entries with what was actually done:
+    // 2 rounds squats+lunges, 1 round everything else
     var log = loadJSON('level_log', []);
-    var clean = [], i, len, skipRun = 0;
+    var clean = [], i, len;
     for (i = 0, len = log.length; i < len; i++) {
-      if (log[i].date === '2026-05-27' && log[i].choice === 'skipped') {
-        // Check if this is part of a rapid-skip burst (< 1s between entries)
-        if (i + 1 < len && log[i + 1].date === '2026-05-27' && log[i + 1].choice === 'skipped' && log[i + 1].ts - log[i].ts < 1000) {
-          skipRun++;
-          continue; // drop this fake skip
-        }
-        if (skipRun > 0) { skipRun = 0; continue; } // drop last in burst
-      }
-      skipRun = 0;
-      clean.push(log[i]);
+      if (log[i].date !== '2026-05-27') clean.push(log[i]);
     }
-    if (clean.length < log.length) saveJSON('level_log', clean);
-    // Fix workout log: was logged as 3 rounds but actually ~1-2
+    var actual = [
+      { exercise: 'Squats', choice: 'standard' }, { exercise: 'Lunges', choice: 'standard' },
+      { exercise: 'Glute Bridge', choice: 'harder' }, { exercise: 'Single-Leg Bridge', choice: 'standard' },
+      { exercise: 'Wall Sit', choice: 'standard' }, { exercise: 'Dead Bug', choice: 'standard' },
+      { exercise: 'Chin Tucks', choice: 'standard' }, { exercise: 'Shoulder Blade Squeezes', choice: 'standard' },
+      { exercise: 'Wall Posture Hold', choice: 'standard' },
+      { exercise: 'Squats', choice: 'standard' }, { exercise: 'Lunges', choice: 'standard' }
+    ];
+    for (i = 0, len = actual.length; i < len; i++) {
+      clean.push({ date: '2026-05-27', exercise: actual[i].exercise, choice: actual[i].choice, ts: 1779847894810 + i * 60000 });
+    }
+    saveJSON('level_log', clean);
+    // Fix workout log
     var wl = loadJSON('workout_log', []);
     for (i = 0, len = wl.length; i < len; i++) {
-      if (wl[i].date === '2026-05-27' && wl[i].workout === 'Lower Body + Core (Strength B)' && wl[i].rounds === 3) {
+      if (wl[i].date === '2026-05-27' && wl[i].workout.indexOf('Lower Body') !== -1) {
         wl[i].rounds = '2 (partial)';
-        break;
       }
     }
     saveJSON('workout_log', wl);
-    saveJSON('fix_may27', true);
+    saveJSON('fix_may27v2', true);
   }
 
   function init() {
