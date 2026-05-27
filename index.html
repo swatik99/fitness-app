@@ -80,10 +80,12 @@
 
       <div class="exercise-actions">
         <button id="btn-start-exercise" class="btn btn-primary" onclick="app.startExerciseTimer()">▶ Start</button>
+        <button id="btn-prev" class="btn btn-muted" onclick="app.prevExercise()">⏮ Prev</button>
         <button id="btn-done" class="btn btn-success" onclick="app.markDone()">✓ Done</button>
         <button id="btn-easier" class="btn btn-warn" onclick="app.swapEasier()">↓ Easier</button>
         <button id="btn-harder" class="btn btn-info" onclick="app.swapHarder()">↑ Harder</button>
         <button id="btn-skip" class="btn btn-muted" onclick="app.skipExercise()">⏭ Skip</button>
+        <button id="btn-stop" class="btn btn-danger" onclick="app.stopWorkout()">⏹ Stop</button>
       </div>
 
       <div class="exercise-progress">

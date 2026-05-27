@@ -184,7 +184,55 @@ var app = (function () {
       steps: ['Coat 3 sardines with chilli powder + salt', 'Heat 1 tsp oil, fry with sliced onion + garlic', 'Cook 3–4 min each side', 'Serve with chapathi or rice'] },
     { name: 'Kanjipayar (Green Gram)', time: 15, totalCal: 200, serves: 2, protein: 14, need: ['Green Gram'],
       ingredients: [{ item: 'Green Gram', qty: 100, unit: 'g dry' }, { item: 'Coconut', qty: 2, unit: 'tbsp grated' }, { item: 'Shallots', qty: 3, unit: 'pcs' }, { item: 'Coconut oil', qty: 1, unit: 'tsp' }],
-      steps: ['Boil 100g green gram till soft (10 min)', 'Drain, add grated coconut + sliced shallots', 'Temper with 1 tsp coconut oil + mustard', 'Salt to taste'] }
+      steps: ['Boil 100g green gram till soft (10 min)', 'Drain, add grated coconut + sliced shallots', 'Temper with 1 tsp coconut oil + mustard', 'Salt to taste'] },
+    { name: 'Moong Dal Cheela', time: 12, totalCal: 330, serves: 1, protein: 19, need: ['Moong Dal', 'Onion'],
+      ingredients: [{ item: 'Moong Dal (soaked/flour)', qty: 80, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Green Chili', qty: 1, unit: 'pc' }, { item: 'Cumin', qty: 0.5, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Grind soaked moong dal with water, salt, turmeric, cumin into batter', 'Fold in chopped onion and green chili', 'Pour thin like dosa on hot pan, cook 2-3 min per side', 'Serve with curd or chutney'] },
+    { name: 'Paneer Bhurji', time: 10, totalCal: 340, serves: 1, protein: 18, need: ['Paneer', 'Onion', 'Tomato'],
+      ingredients: [{ item: 'Paneer', qty: 100, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Tomato', qty: 1, unit: 'small' }, { item: 'Green Chili', qty: 1, unit: 'pc' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Heat oil, sauté onion + green chili till soft, add tomato 2 min', 'Add turmeric, chili powder, salt', 'Add crumbled paneer, stir fry 3-4 min', 'Serve with chapathi or as-is'] },
+    { name: 'Kerala Chicken Pepper Fry', time: 15, totalCal: 280, serves: 1, protein: 30, need: ['Chicken', 'Black Pepper', 'Curry Leaves'],
+      ingredients: [{ item: 'Chicken', qty: 150, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }, { item: 'Black Pepper', qty: 1, unit: 'tsp' }, { item: 'Ginger-Garlic Paste', qty: 1, unit: 'tsp' }, { item: 'Coconut Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Marinate chicken with turmeric, pepper, ginger-garlic, salt 5 min', 'Heat coconut oil, add curry leaves + sliced onion, sauté till brown', 'Add chicken, cook on high 7-8 min till charred edges', 'Add soy sauce, toss and serve'] },
+    { name: 'Masoor Dal Tadka', time: 12, totalCal: 270, serves: 1, protein: 16, need: ['Masoor Dal', 'Tomato', 'Garlic'],
+      ingredients: [{ item: 'Masoor Dal', qty: 65, unit: 'g' }, { item: 'Tomato', qty: 1, unit: 'small' }, { item: 'Garlic', qty: 3, unit: 'cloves' }, { item: 'Cumin', qty: 0.5, unit: 'tsp' }, { item: 'Ghee', qty: 1, unit: 'tsp' }],
+      steps: ['Boil masoor dal with water, turmeric, salt, tomato (8-10 min)', 'Heat ghee, crackle cumin, fry sliced garlic till golden', 'Add chili powder to tadka, pour over dal', 'Serve with rice or chapathi'] },
+    { name: 'Egg Fried Rice', time: 10, totalCal: 400, serves: 1, protein: 18, need: ['Eggs', 'Rice', 'Soy Sauce'],
+      ingredients: [{ item: 'Cooked Rice (cold)', qty: 1, unit: 'cup' }, { item: 'Eggs', qty: 2, unit: 'pcs' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Carrot', qty: 0.25, unit: 'cup' }, { item: 'Soy Sauce', qty: 1, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Heat oil, scramble eggs, set aside', 'In same pan sauté onion, carrot, beans 2 min', 'Add cold rice, soy sauce, pepper — toss 3-4 min', 'Add eggs back, mix and serve'] },
+    { name: 'Chicken Keema Fry', time: 12, totalCal: 260, serves: 1, protein: 30, need: ['Chicken', 'Onion', 'Garam Masala'],
+      ingredients: [{ item: 'Chicken (minced)', qty: 150, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Tomato', qty: 1, unit: 'small' }, { item: 'Ginger-Garlic Paste', qty: 1, unit: 'tsp' }, { item: 'Garam Masala', qty: 0.5, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Heat oil, sauté onion till golden, add ginger-garlic paste 1 min', 'Add chicken mince, turmeric, chili, salt — cook on high 5-6 min', 'Add tomato and garam masala, cook 3 more min till dry', 'Serve with chapathi, dosa, or on its own'] },
+    { name: 'Mutta Thoran', time: 10, totalCal: 240, serves: 1, protein: 14, need: ['Eggs', 'Coconut', 'Shallots', 'Curry Leaves'],
+      ingredients: [{ item: 'Eggs', qty: 2, unit: 'pcs' }, { item: 'Shallots', qty: 4, unit: 'pcs' }, { item: 'Coconut', qty: 2, unit: 'tbsp' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }, { item: 'Mustard Seeds', qty: 0.25, unit: 'tsp' }, { item: 'Coconut Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Beat eggs with turmeric+salt, scramble, break into rough pieces', 'Heat coconut oil, splutter mustard, add curry leaves, chili, shallots', 'Add egg pieces and grated coconut, toss 1 min', 'Serve with rice and rasam'] },
+    { name: 'Quick Chana Masala', time: 12, totalCal: 340, serves: 1, protein: 15, need: ['Chickpeas', 'Onion', 'Tomato'],
+      ingredients: [{ item: 'Chickpeas (boiled)', qty: 1, unit: 'cup' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Tomato', qty: 1, unit: 'medium' }, { item: 'Ginger-Garlic Paste', qty: 1, unit: 'tsp' }, { item: 'Chana Masala', qty: 1, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Heat oil, sauté onion till golden, add ginger-garlic paste', 'Add tomato, chana masala, chili, salt — cook till mushy', 'Add boiled chickpeas, cover and simmer 5 min', 'Squeeze lemon, serve with chapathi or rice'] },
+    { name: 'Soya Chunks Stir Fry', time: 12, totalCal: 260, serves: 1, protein: 26, need: ['Soya Chunks', 'Onion', 'Capsicum'],
+      ingredients: [{ item: 'Soya Chunks', qty: 50, unit: 'g' }, { item: 'Onion', qty: 1, unit: 'medium' }, { item: 'Capsicum', qty: 0.5, unit: 'pc' }, { item: 'Tomato', qty: 1, unit: 'small' }, { item: 'Soy Sauce', qty: 1, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Boil soya chunks 5 min, squeeze out water', 'Heat oil, sauté onion and ginger-garlic 2 min', 'Add capsicum, tomato, soya, chili, garam masala, soy sauce', 'Stir fry on high 4-5 min, serve with chapathi'] },
+    { name: 'Kerala Meen Curry', time: 15, totalCal: 270, serves: 1, protein: 28, need: ['Fish', 'Coconut', 'Tamarind'],
+      ingredients: [{ item: 'Fish', qty: 150, unit: 'g' }, { item: 'Coconut (paste)', qty: 3, unit: 'tbsp' }, { item: 'Tamarind', qty: 1, unit: 'pc' }, { item: 'Shallots', qty: 4, unit: 'pcs' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }, { item: 'Kashmiri Chili', qty: 1, unit: 'tsp' }, { item: 'Coconut Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Boil water with tamarind, shallots, chili, turmeric, fenugreek, salt', 'Add fish pieces, cover and cook 7-8 min — shake pot, don\'t stir', 'Add coconut paste and curry leaves, simmer 3 min', 'Drizzle coconut oil, serve with rice'] },
+    { name: 'Paneer Capsicum Stir Fry', time: 10, totalCal: 300, serves: 1, protein: 16, need: ['Paneer', 'Capsicum', 'Onion'],
+      ingredients: [{ item: 'Paneer', qty: 80, unit: 'g' }, { item: 'Capsicum', qty: 1, unit: 'medium' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Soy Sauce', qty: 0.5, unit: 'tsp' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Heat oil on high, fry paneer cubes till golden 2 min, set aside', 'Stir fry onion and capsicum 2-3 min on high', 'Add paneer back with soy sauce, pepper, chili flakes', 'Serve hot as-is or with chapathi'] },
+    { name: 'Chicken Rasam', time: 15, totalCal: 200, serves: 1, protein: 24, need: ['Chicken', 'Tamarind', 'Tomato', 'Rasam Powder'],
+      ingredients: [{ item: 'Chicken (bone-in)', qty: 120, unit: 'g' }, { item: 'Tamarind', qty: 1, unit: 'pc' }, { item: 'Tomato', qty: 1, unit: 'medium' }, { item: 'Garlic', qty: 3, unit: 'cloves' }, { item: 'Rasam Powder', qty: 1, unit: 'tsp' }, { item: 'Pepper', qty: 0.5, unit: 'tsp' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }],
+      steps: ['Boil chicken with water, turmeric, salt 8-10 min', 'Add tamarind extract, tomato, rasam powder, pepper, garlic', 'Temper with mustard + curry leaves in oil', 'Drink as soup or pour over rice'] },
+    { name: 'Egg Drop Soup', time: 8, totalCal: 180, serves: 1, protein: 14, need: ['Eggs', 'Sweet Corn', 'Soy Sauce'],
+      ingredients: [{ item: 'Eggs', qty: 2, unit: 'pcs' }, { item: 'Sweet Corn', qty: 0.25, unit: 'cup' }, { item: 'Garlic', qty: 2, unit: 'cloves' }, { item: 'Soy Sauce', qty: 1, unit: 'tsp' }, { item: 'Cornstarch', qty: 1, unit: 'tsp' }],
+      steps: ['Boil water with garlic, corn, soy sauce, pepper, salt 3 min', 'Mix cornstarch in cold water, stir into soup to thicken', 'Beat eggs, slowly drizzle into simmering soup while stirring', 'Garnish with spring onion — light dinner'] },
+    { name: 'Pesarattu (Moong Dosa)', time: 10, totalCal: 280, serves: 1, protein: 16, need: ['Green Moong Dal', 'Rice Flour', 'Ginger'],
+      ingredients: [{ item: 'Green Moong Dal (soaked 4h)', qty: 0.5, unit: 'cup' }, { item: 'Rice Flour', qty: 1, unit: 'tbsp' }, { item: 'Ginger', qty: 1, unit: 'pc' }, { item: 'Green Chili', qty: 1, unit: 'pc' }, { item: 'Onion', qty: 1, unit: 'small' }, { item: 'Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Grind soaked moong with ginger, chili, cumin, salt — add rice flour', 'Spread on hot tawa like dosa, sprinkle chopped onion', 'Cook on medium till crispy underneath, fold', 'Serve with coconut chutney — soak dal before work'] },
+    { name: 'Kerala Kadala Curry', time: 15, totalCal: 340, serves: 1, protein: 15, need: ['Black Chickpeas', 'Coconut', 'Shallots'],
+      ingredients: [{ item: 'Black Chickpeas (boiled)', qty: 1, unit: 'cup' }, { item: 'Coconut', qty: 3, unit: 'tbsp' }, { item: 'Shallots', qty: 4, unit: 'pcs' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }, { item: 'Kashmiri Chili', qty: 1, unit: 'tsp' }, { item: 'Coconut Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Grind coconut with 2 shallots, chili, coriander powder into paste', 'Add boiled kadala, paste, turmeric, salt, water — simmer 8-10 min', 'Temper with coconut oil, mustard, curry leaves, remaining shallots', 'Serve with puttu, appam, or chapathi'] },
+    { name: 'Kerala Sardine Curry', time: 15, totalCal: 290, serves: 1, protein: 24, need: ['Sardine', 'Coconut', 'Tamarind'],
+      ingredients: [{ item: 'Sardine', qty: 150, unit: 'g' }, { item: 'Coconut (paste)', qty: 2, unit: 'tbsp' }, { item: 'Tamarind', qty: 1, unit: 'tbsp' }, { item: 'Shallots', qty: 3, unit: 'pcs' }, { item: 'Curry Leaves', qty: 1, unit: 'sprig' }, { item: 'Kashmiri Chili', qty: 1, unit: 'tsp' }, { item: 'Coconut Oil', qty: 1, unit: 'tsp' }],
+      steps: ['Simmer water with tamarind, shallots, chili, turmeric, fenugreek, salt', 'Place sardines in gravy, cover and cook on low 7-8 min — shake, don\'t stir', 'Add coconut paste and curry leaves, simmer 3 min', 'Drizzle coconut oil, serve with rice'] }
   ];
 
   var OFFICE_BF = [
@@ -318,6 +366,13 @@ var app = (function () {
   }
 
   // ===== WORKOUT =====
+  function saveWorkoutState() {
+    if (!st.wo) return;
+    saveJSON('wo_state', { day: st.overDay || todayKey(), exIdx: st.exIdx, round: st.round, resting: st.resting });
+  }
+
+  function clearWorkoutState() { localStorage.removeItem('sf_wo_state'); }
+
   function loadWorkout(dayKey) {
     var wo = WORKOUTS[dayKey];
     if (!wo || wo.type !== 'strength') {
@@ -329,7 +384,13 @@ var app = (function () {
       return;
     }
     st.wo = JSON.parse(JSON.stringify(wo));
-    st.exIdx = 0; st.round = 1; st.resting = false;
+    // Restore saved state if same day
+    var saved = loadJSON('wo_state', null);
+    if (saved && saved.day === dayKey && saved.round <= wo.rounds) {
+      st.exIdx = saved.exIdx; st.round = saved.round; st.resting = false;
+    } else {
+      st.exIdx = 0; st.round = 1; st.resting = false;
+    }
     $('exercise-card').classList.remove('hidden');
     $('workout-complete').classList.add('hidden');
     $('rest-day-card').classList.add('hidden');
@@ -435,7 +496,41 @@ var app = (function () {
       st.exIdx = 0; st.round++;
       if (st.round > wo.rounds) { completeWorkout(); return; }
     }
+    saveWorkoutState();
     showRest(restSec, endOfRound);
+  }
+
+  function prevExercise() {
+    if (st.resting) { clearInterval(st.restTimer); st.resting = false; $('rest-banner').classList.add('hidden'); $('btn-done').textContent = '✓ Done'; }
+    clearInterval(st.exTimer);
+    if (st.exIdx > 0) {
+      st.exIdx--;
+    } else if (st.round > 1) {
+      st.round--;
+      st.exIdx = st.wo.exercises.length - 1;
+    } else {
+      toast('Already at the first exercise'); return;
+    }
+    saveWorkoutState();
+    renderEx();
+  }
+
+  function stopWorkout() {
+    if (!st.wo) return;
+    clearInterval(st.exTimer); clearInterval(st.restTimer);
+    var total = st.wo.exercises.length * st.wo.rounds;
+    var done = (st.round - 1) * st.wo.exercises.length + st.exIdx;
+    if (done === 0) { toast('No exercises completed yet'); return; }
+    $('exercise-card').classList.add('hidden');
+    $('workout-complete').classList.remove('hidden');
+    $('workout-summary').textContent = done + '/' + total + ' exercises completed (stopped early)';
+    $('workout-level-summary').textContent = 'Partial workout saved.';
+    beepDone(); vib([200, 100, 200]);
+    var log = loadJSON('workout_log', []);
+    log.push({ date: ds(), workout: st.wo.name + ' (partial)', rounds: st.round - 1 + '/' + st.wo.rounds });
+    saveJSON('workout_log', log);
+    clearWorkoutState();
+    autoSync();
   }
 
   function showRest(sec, isRound) {
@@ -513,6 +608,7 @@ var app = (function () {
     var log = loadJSON('workout_log', []);
     log.push({ date: ds(), workout: st.wo.name, rounds: st.wo.rounds });
     saveJSON('workout_log', log);
+    clearWorkoutState();
     autoSync();
   }
 
@@ -1158,6 +1254,16 @@ var app = (function () {
     { name: 'Buttermilk (1 glass)', cal: 40, protein: 2 },
     { name: 'Milk (1 glass)', cal: 120, protein: 6 },
     { name: 'Kanjipayar/Green Gram (1 bowl)', cal: 100, protein: 7 },
+    { name: 'Soya Chunks (50g cooked)', cal: 170, protein: 26 },
+    { name: 'Paneer (100g)', cal: 260, protein: 18 },
+    { name: 'Chickpeas/Chana (1 cup cooked)', cal: 270, protein: 15 },
+    { name: 'Masoor Dal (1 bowl)', cal: 180, protein: 12 },
+    { name: 'Moong Dal Cheela (2 pcs)', cal: 330, protein: 19 },
+    { name: 'Pesarattu (1 pc)', cal: 280, protein: 16 },
+    { name: 'Kadala Curry (1 bowl)', cal: 340, protein: 15 },
+    { name: 'Fish Curry (1 serving)', cal: 270, protein: 28 },
+    { name: 'Rasam (1 bowl)', cal: 50, protein: 2 },
+    { name: 'Chicken Rasam (1 bowl)', cal: 200, protein: 24 },
     // Snacks
     { name: 'Roasted Chana (30g)', cal: 110, protein: 7 },
     { name: 'Seed Laddu (1 pc, 3cm)', cal: 65, protein: 2 },
@@ -1464,7 +1570,8 @@ var app = (function () {
     switchTab: switchTab, overrideDay: overrideDay,
     startExerciseTimer: startExerciseTimer, markDone: markDone,
     swapEasier: swapEasier, swapHarder: swapHarder,
-    skipExercise: skipExercise, resetWorkout: resetWorkout,
+    skipExercise: skipExercise, prevExercise: prevExercise,
+    stopWorkout: stopWorkout, resetWorkout: resetWorkout,
     watchDemo: watchDemo,
     startCardio: startCardio, toggleCardioPause: toggleCardioPause,
     stopCardio: stopCardio, updateCardioPreview: updateCardioPreview,
