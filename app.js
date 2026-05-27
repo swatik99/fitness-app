@@ -1557,7 +1557,38 @@ var app = (function () {
   }
 
   // ===== INIT =====
+  function fixMay27Data() {
+    if (loadJSON('fix_may27', false)) return;
+    // Remove fake skipped entries from rapid-skip exit (no Stop button at the time)
+    var log = loadJSON('level_log', []);
+    var clean = [], i, len, skipRun = 0;
+    for (i = 0, len = log.length; i < len; i++) {
+      if (log[i].date === '2026-05-27' && log[i].choice === 'skipped') {
+        // Check if this is part of a rapid-skip burst (< 1s between entries)
+        if (i + 1 < len && log[i + 1].date === '2026-05-27' && log[i + 1].choice === 'skipped' && log[i + 1].ts - log[i].ts < 1000) {
+          skipRun++;
+          continue; // drop this fake skip
+        }
+        if (skipRun > 0) { skipRun = 0; continue; } // drop last in burst
+      }
+      skipRun = 0;
+      clean.push(log[i]);
+    }
+    if (clean.length < log.length) saveJSON('level_log', clean);
+    // Fix workout log: was logged as 3 rounds but actually ~1-2
+    var wl = loadJSON('workout_log', []);
+    for (i = 0, len = wl.length; i < len; i++) {
+      if (wl[i].date === '2026-05-27' && wl[i].workout === 'Lower Body + Core (Strength B)' && wl[i].rounds === 3) {
+        wl[i].rounds = '2 (partial)';
+        break;
+      }
+    }
+    saveJSON('workout_log', wl);
+    saveJSON('fix_may27', true);
+  }
+
   function init() {
+    fixMay27Data();
     checkPinSession();
     $('topbar-day').textContent = todayLabel();
     initWorkout();
