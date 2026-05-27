@@ -402,7 +402,7 @@ var app = (function () {
 
   function watchDemo() {
     var q = $('btn-demo').dataset.demo || 'exercise+form';
-    window.open('https://www.youtube.com/results?search_query=' + q, '_blank');
+    window.open('https://www.youtube.com/shorts?search_query=' + q + '+short+demo', '_blank');
   }
 
   function startExerciseTimer() {
@@ -1198,31 +1198,80 @@ var app = (function () {
     return day === 'sunday' ? 1250 : 1450;
   }
 
+  var selectedFoods = [];
+
   function initCalorieTracker() {
-    var sel = $('cal-food-select'); if (!sel) return;
-    sel.innerHTML = '<option value="">— Add food item —</option>';
-    var i, len;
-    for (i = 0, len = FOOD_DB.length; i < len; i++) {
-      var o = document.createElement('option');
-      o.value = i;
-      o.textContent = FOOD_DB[i].name + ' (' + FOOD_DB[i].cal + ' cal, ' + FOOD_DB[i].protein + 'g P)';
-      sel.appendChild(o);
-    }
     renderCalorieLog();
   }
 
+  function filterFood() {
+    var q = ($('cal-food-search').value || '').toLowerCase();
+    var dd = $('cal-food-dropdown');
+    if (!q || q.length < 1) { dd.classList.add('hidden'); return; }
+    dd.innerHTML = '';
+    var count = 0, i, len;
+    for (i = 0, len = FOOD_DB.length; i < len; i++) {
+      if (FOOD_DB[i].name.toLowerCase().indexOf(q) !== -1) {
+        var d = document.createElement('div');
+        d.className = 'food-option';
+        d.textContent = FOOD_DB[i].name + ' (' + FOOD_DB[i].cal + ' cal, ' + FOOD_DB[i].protein + 'g P)';
+        d.dataset.idx = i;
+        d.addEventListener('click', selectFood);
+        dd.appendChild(d);
+        count++;
+        if (count >= 8) break;
+      }
+    }
+    dd.classList.toggle('hidden', count === 0);
+  }
+
+  function selectFood(e) {
+    var idx = parseInt(e.currentTarget.dataset.idx);
+    var already = false, i, len;
+    for (i = 0, len = selectedFoods.length; i < len; i++) { if (selectedFoods[i] === idx) { already = true; break; } }
+    if (!already) selectedFoods.push(idx);
+    $('cal-food-search').value = '';
+    $('cal-food-dropdown').classList.add('hidden');
+    renderFoodChips();
+  }
+
+  function removeFoodChip(idx) {
+    var i = selectedFoods.indexOf(idx);
+    if (i !== -1) selectedFoods.splice(i, 1);
+    renderFoodChips();
+  }
+
+  function renderFoodChips() {
+    var c = $('cal-food-chips'); c.innerHTML = '';
+    var i, len;
+    for (i = 0, len = selectedFoods.length; i < len; i++) {
+      var f = FOOD_DB[selectedFoods[i]];
+      var chip = document.createElement('span');
+      chip.className = 'food-chip';
+      chip.innerHTML = f.name + ' <span class="chip-x" data-idx="' + selectedFoods[i] + '">×</span>';
+      chip.querySelector('.chip-x').addEventListener('click', function (e) {
+        removeFoodChip(parseInt(e.target.dataset.idx));
+      });
+      c.appendChild(chip);
+    }
+  }
+
   function addCalorie() {
-    var idx = parseInt($('cal-food-select').value);
-    if (isNaN(idx)) return;
+    if (selectedFoods.length === 0) return;
     var qty = parseInt($('cal-qty').value) || 1;
-    var food = FOOD_DB[idx];
     var log = loadJSON('cal_' + ds(), []);
-    log.push({ name: food.name, cal: food.cal * qty, qty: qty, protein: (food.protein || 0) * qty });
+    var names = [], i, len;
+    for (i = 0, len = selectedFoods.length; i < len; i++) {
+      var food = FOOD_DB[selectedFoods[i]];
+      log.push({ name: food.name, cal: food.cal * qty, qty: qty, protein: (food.protein || 0) * qty });
+      names.push(food.name);
+    }
     saveJSON('cal_' + ds(), log);
-    $('cal-food-select').value = '';
+    selectedFoods = [];
+    renderFoodChips();
     $('cal-qty').value = '1';
     renderCalorieLog();
-    toast(food.name + ' added');
+    toast(names.join(', ') + ' added');
   }
 
   function removeCalorie(index) {
@@ -1391,6 +1440,20 @@ var app = (function () {
     var savedURL = loadJSON('sheet_url', '');
     if (savedURL && $('inp-sheet-url')) $('inp-sheet-url').value = savedURL;
     renderFeedback();
+    checkMeasurementReminder();
+  }
+
+  function checkMeasurementReminder() {
+    var meas = loadJSON('measurements', []);
+    if (meas.length === 0) return;
+    var last = meas[meas.length - 1].date;
+    var diff = Math.floor((Date.now() - new Date(last).getTime()) / 86400000);
+    if (diff >= 14) {
+      toast('📏 Time for measurements! Last taken ' + diff + ' days ago.');
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Measurement Day!', { body: 'Last taken ' + diff + ' days ago. Go to Progress tab.', tag: 'meas-remind' });
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
@@ -1413,7 +1476,7 @@ var app = (function () {
     importMD: importMD, loadMDFile: loadMDFile,
     exportData: exportData, clearData: clearData,
     updateSorenessCalc: updateSorenessCalc, applySoreness: applySoreness,
-    addCalorie: addCalorie, removeCalorie: removeCalorie,
+    addCalorie: addCalorie, removeCalorie: removeCalorie, filterFood: filterFood,
     saveMeasurements: saveMeasurements,
     saveWalkChecklist: saveWalkChecklist, enableWalkNotifications: enableWalkNotifications,
     logRecipePortion: logRecipePortion,

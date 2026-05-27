@@ -301,12 +301,12 @@
         <div id="cal-bar" class="cal-bar"></div>
       </div>
       <div class="mt-12">
-        <select id="cal-food-select" style="width:100%;margin-bottom:8px">
-          <option value="">— Add food item —</option>
-        </select>
-        <div class="row-between">
+        <input type="text" id="cal-food-search" placeholder="🔍 Search food..." oninput="app.filterFood()" autocomplete="off" style="width:100%;margin-bottom:8px">
+        <div id="cal-food-chips" class="food-chips"></div>
+        <div id="cal-food-dropdown" class="food-dropdown hidden"></div>
+        <div class="row-between mt-8">
           <input type="number" id="cal-qty" inputmode="numeric" value="1" min="1" style="width:60px" placeholder="qty">
-          <button class="btn btn-primary" onclick="app.addCalorie()">+ Add</button>
+          <button class="btn btn-primary" onclick="app.addCalorie()">+ Add Selected</button>
         </div>
       </div>
       <div id="cal-log" class="mt-8"></div>

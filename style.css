@@ -166,6 +166,16 @@ select{background:var(--bg3);color:var(--text);border:1px solid var(--bg3);paddi
 .toast{position:fixed;bottom:calc(var(--nav-h)+16px);left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);padding:10px 24px;border-radius:24px;font-size:.88rem;font-weight:600;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 
+/* FOOD MULTISELECT */
+.food-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
+.food-chip{background:var(--accent);color:var(--bg);padding:4px 10px;border-radius:16px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:4px;cursor:pointer}
+.food-chip .chip-x{font-weight:700;margin-left:2px}
+.food-dropdown{max-height:200px;overflow-y:auto;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;margin-top:4px}
+.food-dropdown.hidden{display:none}
+.food-option{padding:10px 12px;font-size:.85rem;cursor:pointer;border-bottom:1px solid var(--bg3)}
+.food-option:active,.food-option.selected{background:var(--bg3)}
+.food-option:last-child{border-bottom:none}
+
 /* SORENESS CALCULATOR */
 .soreness-checks{display:flex;flex-direction:column;gap:14px}
 .soreness-row{display:flex;flex-direction:column;gap:4px}
