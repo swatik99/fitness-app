@@ -636,6 +636,29 @@ var app = (function () {
     $('cardio-preview').textContent = d;
   }
 
+  function saveCardioState() {
+    saveJSON('cardio_state', { pi: st.cardioPI, te: st.cardioTE, td: st.cardioTD, tl: st.cardioTL, paused: st.cardioPaused, week: parseInt($('cardio-week').value), ts: Date.now() });
+  }
+
+  function clearCardioState() { localStorage.removeItem('sf_cardio_state'); }
+
+  function restoreCardio() {
+    var s = loadJSON('cardio_state', null);
+    if (!s || !s.week) return;
+    // Only restore if saved less than 2 hours ago
+    if (Date.now() - s.ts > 7200000) { clearCardioState(); return; }
+    st.cardioPhases = buildPhases(s.week); st.cardioPI = s.pi; st.cardioTE = s.te; st.cardioTD = s.td; st.cardioTL = s.tl; st.cardioPaused = true;
+    $('cardio-week').value = s.week;
+    $('cardio-start-card').classList.add('hidden'); $('cardio-active').classList.remove('hidden');
+    announcePhase();
+    $('btn-cardio-pause').textContent = '▶ Resume';
+    var pct = Math.round((st.cardioTE / st.cardioTD) * 100);
+    $('cardio-total-bar').style.setProperty('--progress', pct + '%');
+    $('cardio-total-text').textContent = fmt(st.cardioTE) + ' / ' + fmt(st.cardioTD);
+    st.cardioIv = setInterval(tickCardio, 1000);
+    toast('Cardio session restored (paused)');
+  }
+
   function startCardio() {
     var w = parseInt($('cardio-week').value);
     st.cardioPhases = buildPhases(w); st.cardioPI = 0; st.cardioPaused = false;
@@ -675,10 +698,11 @@ var app = (function () {
       st.cardioTL = st.cardioPhases[st.cardioPI].dur;
       announcePhase();
     }
+    saveCardioState();
   }
 
   function toggleCardioPause() { st.cardioPaused = !st.cardioPaused; $('btn-cardio-pause').textContent = st.cardioPaused ? '▶ Resume' : '⏸ Pause'; }
-  function stopCardio() { clearInterval(st.cardioIv); $('cardio-active').classList.add('hidden'); $('cardio-start-card').classList.remove('hidden'); }
+  function stopCardio() { clearInterval(st.cardioIv); clearCardioState(); $('cardio-active').classList.add('hidden'); $('cardio-start-card').classList.remove('hidden'); }
 
   // ===== FOOD =====
   function initFood() {
@@ -1547,6 +1571,9 @@ var app = (function () {
     if (savedURL && $('inp-sheet-url')) $('inp-sheet-url').value = savedURL;
     renderFeedback();
     checkMeasurementReminder();
+    restoreCardio();
+    // Auto-sync every 15 minutes
+    setInterval(autoSync, 900000);
   }
 
   function checkMeasurementReminder() {
