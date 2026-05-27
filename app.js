@@ -606,15 +606,28 @@ var app = (function () {
 
   function filterRecipes() {
     if (st.selIng.size === 0) { $('recipe-results').classList.add('hidden'); return; }
-    var matches = [], i, len, j, jLen;
+    var exact = [], partial = [], i, len, j, jLen;
     for (i = 0, len = RECIPES.length; i < len; i++) {
-      var r = RECIPES[i], ok = true;
-      for (j = 0, jLen = r.need.length; j < jLen; j++) { if (!st.selIng.has(r.need[j])) { ok = false; break; } }
-      if (ok) matches.push(r);
+      var r = RECIPES[i], matched = 0;
+      for (j = 0, jLen = r.need.length; j < jLen; j++) { if (st.selIng.has(r.need[j])) matched++; }
+      if (matched === r.need.length) exact.push(r);
+      else if (matched >= Math.min(2, r.need.length)) partial.push({ r: r, pct: Math.round((matched / r.need.length) * 100) });
     }
+    partial.sort(function (a, b) { return b.pct - a.pct; });
     var c = $('recipe-list'); c.innerHTML = '';
-    if (matches.length === 0) c.innerHTML = '<p class="small-text">No matches. Select more ingredients.</p>';
-    else for (i = 0, len = matches.length; i < len; i++) c.appendChild(recipeCard(matches[i], true));
+    if (exact.length === 0 && partial.length === 0) {
+      c.innerHTML = '<p class="small-text">No matches. Select more ingredients.</p>';
+    } else {
+      for (i = 0, len = exact.length; i < len; i++) c.appendChild(recipeCard(exact[i], true));
+      if (partial.length > 0 && exact.length > 0) c.insertAdjacentHTML('beforeend', '<div class="section-label" style="margin:12px 0 6px">Almost — you\'re missing a few:</div>');
+      else if (partial.length > 0) c.insertAdjacentHTML('beforeend', '<div class="section-label" style="margin:0 0 6px">Close matches (missing some items):</div>');
+      for (i = 0, len = partial.length; i < len; i++) {
+        var card = recipeCard(partial[i].r, true);
+        card.style.opacity = '0.75';
+        card.insertAdjacentHTML('afterbegin', '<div class="small-text" style="color:var(--accent);margin-bottom:6px">' + partial[i].pct + '% match</div>');
+        c.appendChild(card);
+      }
+    }
     $('recipe-results').classList.remove('hidden');
   }
 
@@ -631,7 +644,7 @@ var app = (function () {
     var scaleHtml = '';
     if (scaleIng && withCook) {
       scaleHtml = '<div class="recipe-scale mt-8">' +
-        '<label class="small-text">I have <input type="number" class="scale-input" value="' + scaleIng.qty + '" min="1" inputmode="numeric" data-ridx="' + rIdx + '" data-sidx="' + scaleIdx + '" onchange="app.scaleRecipe(this)"> ' + scaleIng.unit + ' ' + scaleIng.item + '</label>' +
+        '<label class="small-text">I have <input type="number" class="scale-input" value="' + scaleIng.qty + '" min="1" inputmode="numeric" data-ridx="' + rIdx + '" data-sidx="' + scaleIdx + '" oninput="app.scaleRecipe(this)"> ' + scaleIng.unit + ' ' + scaleIng.item + '</label>' +
         '</div>';
     }
     // Ingredient list with quantities
@@ -992,7 +1005,8 @@ var app = (function () {
       level_log: loadJSON('level_log', []),
       cook_log: loadJSON('cook_log', []),
       measurements: loadJSON('measurements', []),
-      calories: loadJSON('cal_' + ds(), [])
+      calories: loadJSON('cal_' + ds(), []),
+      feedback: loadJSON('feedback', [])
     };
     $('sync-status').textContent = 'Syncing...';
     fetch(url, {
@@ -1014,6 +1028,27 @@ var app = (function () {
     saveJSON('custom_md', md);
     $('md-status').textContent = 'Plan saved! Exercises/meals can be updated in future versions.';
     beepDone();
+  }
+
+  // ===== FEEDBACK =====
+  function saveFeedback() {
+    var text = $('feedback-input').value.trim();
+    if (!text) return;
+    var fb = loadJSON('feedback', []);
+    fb.push({ date: ds(), time: new Date().toLocaleTimeString(), text: text });
+    saveJSON('feedback', fb);
+    $('feedback-input').value = '';
+    renderFeedback();
+    toast('Feedback saved');
+  }
+
+  function renderFeedback() {
+    var fb = loadJSON('feedback', []);
+    var el = $('feedback-list'); if (!el) return;
+    if (fb.length === 0) { el.innerHTML = ''; return; }
+    var h = '', i = fb.length;
+    while (i--) h += '<div class="cal-log-item"><span>' + fb[i].date + ' ' + fb[i].time + '</span><span style="flex:2;margin-left:8px">' + fb[i].text + '</span></div>';
+    el.innerHTML = h;
   }
 
   function loadMDFile(e) {
@@ -1355,6 +1390,7 @@ var app = (function () {
     // Load saved sheet URL
     var savedURL = loadJSON('sheet_url', '');
     if (savedURL && $('inp-sheet-url')) $('inp-sheet-url').value = savedURL;
+    renderFeedback();
   }
 
   document.addEventListener('DOMContentLoaded', init);
@@ -1373,6 +1409,7 @@ var app = (function () {
     copyCheckin: copyCheckin, copyWeeklyReport: copyWeeklyReport,
     saveChecklist: saveChecklist, toggleMovementReminder: toggleMovementReminder,
     saveSheetURL: saveSheetURL, syncNow: syncNow,
+    saveFeedback: saveFeedback,
     importMD: importMD, loadMDFile: loadMDFile,
     exportData: exportData, clearData: clearData,
     updateSorenessCalc: updateSorenessCalc, applySoreness: applySoreness,

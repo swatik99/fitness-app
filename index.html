@@ -339,14 +339,11 @@
     </div>
 
     <div class="card">
-      <h2>Update Plan from Markdown</h2>
-      <p class="small-text">Upload your updated .md plan to refresh exercises, meals, intervals.</p>
-      <textarea id="md-input" rows="6" placeholder="Paste .md content here..."></textarea>
-      <div class="row-center gap-8 mt-12">
-        <button class="btn btn-primary" onclick="app.importMD()">Apply</button>
-        <label class="btn btn-info file-label">Upload .md<input type="file" id="md-file" accept=".md,.txt" onchange="app.loadMDFile(event)" hidden></label>
-      </div>
-      <div id="md-status" class="small-text mt-8"></div>
+      <h2>Feedback / Notes</h2>
+      <p class="small-text">Bugs, suggestions, or notes — syncs to your sheet for review.</p>
+      <textarea id="feedback-input" rows="4" placeholder="Type feedback here..."></textarea>
+      <button class="btn btn-primary mt-8" onclick="app.saveFeedback()">💬 Save Feedback</button>
+      <div id="feedback-list" class="mt-8"></div>
     </div>
 
     <div class="card">

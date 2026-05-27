@@ -15,7 +15,9 @@
 
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents);
+    var raw = e.postData ? e.postData.contents : null;
+    if (!raw) return ContentService.createTextOutput(JSON.stringify({status: 'error', message: 'No data'})).setMimeType(ContentService.MimeType.JSON);
+    var data = JSON.parse(raw);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     
     // Entries sheet
@@ -80,9 +82,26 @@ function doPost(e) {
       }
     }
     
+    syncFeedback(ss, data);
+    
     return ContentService.createTextOutput(JSON.stringify({status: 'ok'})).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({status: 'error', message: err.message})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function syncFeedback(ss, data) {
+  if (!data.feedback || data.feedback.length === 0) return;
+  var sheet = getOrCreateSheet(ss, 'Feedback');
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Date', 'Time', 'Feedback']);
+  }
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, 3).clear();
+  }
+  for (var i = 0; i < data.feedback.length; i++) {
+    var fb = data.feedback[i];
+    sheet.appendRow([fb.date, fb.time, fb.text]);
   }
 }
 
@@ -93,11 +112,14 @@ function getOrCreateSheet(ss, name) {
 }
 
 function doGet(e) {
-  // Allow reading data back
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var entrySheet = ss.getSheetByName('Entries');
-  if (!entrySheet) return ContentService.createTextOutput('{}').setMimeType(ContentService.MimeType.JSON);
-  
-  var data = entrySheet.getDataRange().getValues();
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
+  var result = {};
+  var sheets = ['Entries', 'Workouts', 'Levels', 'Cooking', 'Feedback', 'Calories'];
+  for (var i = 0; i < sheets.length; i++) {
+    var sheet = ss.getSheetByName(sheets[i]);
+    if (sheet && sheet.getLastRow() > 0) {
+      result[sheets[i]] = sheet.getDataRange().getValues();
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
 }
